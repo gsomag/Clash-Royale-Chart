@@ -95,6 +95,46 @@
 
 ## 構成
 
-    server/   Express + better-sqlite3（API保持・取得・集計・永続化）
+    lib/      共有ロジック（DB=libSQL / API取得 / ローソク集計 / ハンドラ）
+    api/      Vercel サーバーレス関数（sync / candles / status）
+    server/   ローカル開発用 Express（lib/ の同じハンドラを起動）
     client/   React + Vite + lightweight-charts（チャートUI）
-    data/     SQLite（自動生成）
+    data/     ローカルSQLite（自動生成。本番は Turso）
+
+ローカルは `data/battles.db`（libSQLのファイルモード）、本番(Vercel)は環境変数 `TURSO_DATABASE_URL` で Turso に接続します。コードは同一です。
+
+---
+
+## 本番デプロイ（Vercel + Turso、すべて無料）
+
+「PCを開いていなくても、1日1回自動で戦績を収集」できる構成です。
+
+### 1. Turso でDBを作成
+1. https://turso.tech/ にサインアップ（GitHubログイン可）
+2. データベースを1つ作成 → **Database URL**（`libsql://...`）と **Auth Token** を取得
+
+### 2. GitHub にプッシュ
+このリポジトリを自分の GitHub に push します（`.env` と `data/` は `.gitignore` 済みで漏れません）。
+
+### 3. Vercel で Import
+1. https://vercel.com/ に GitHub でログイン → **Add New → Project** → リポジトリを Import
+2. **Environment Variables** に以下を設定:
+   - `CR_API_TOKEN` … RoyaleAPIプロキシ用トークン
+   - `PLAYER_TAG` … `#8LJ8PGQJQ`（Vercelでは生のままでOK、クォート不要）
+   - `CR_API_BASE` … `https://proxy.royaleapi.dev/v1`
+   - `TURSO_DATABASE_URL` / `TURSO_AUTH_TOKEN` … 手順1の値
+   - （任意）`CRON_SECRET` … 任意の文字列。設定するとCron実行を保護
+3. **Deploy**
+
+### 4. 自動収集（Cron）
+[vercel.json](vercel.json) に `0 18 * * *`（毎日 18:00 UTC = 03:00 JST）で `/api/sync` を叩く設定済み。
+Vercel無料プランの Cron は **1日1回**。`#8LJ8PGQJQ` は1日25戦も滅多にないため、これで十分です。
+たくさん遊んだ日は、デプロイ先URLの画面で手動「同期」ボタンを押せばその場で取り込めます。
+
+## スクリプト
+
+| コマンド | 説明 |
+| --- | --- |
+| `npm run dev` | バックエンド + フロントを同時起動（開発） |
+| `npm run typecheck` | 型チェック |
+| `npm run build` | フロントの本番ビルド（Vercelが実行） |
