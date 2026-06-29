@@ -1,0 +1,36 @@
+- generic [ref=e3]:
+  - generic [ref=e4]:
+    - generic [ref=e5]: 🏆 クラロワ トロフィー
+    - generic [ref=e6]:
+      - button "15M" [ref=e7] [cursor=pointer]
+      - button "30M" [ref=e8] [cursor=pointer]
+      - button "1H" [ref=e9] [cursor=pointer]
+      - button "4H" [ref=e10] [cursor=pointer]
+      - button "12H" [ref=e11] [cursor=pointer]
+      - button "1D" [ref=e12] [cursor=pointer]
+      - button "1W" [ref=e13] [cursor=pointer]
+    - generic [ref=e14]:
+      - button "MA7" [ref=e15] [cursor=pointer]
+      - button "MA25" [active] [ref=e16] [cursor=pointer]
+      - button "MA99" [ref=e17] [cursor=pointer]
+      - button "EMA12" [ref=e18] [cursor=pointer]
+    - button "ライン OFF" [ref=e19] [cursor=pointer]
+    - generic [ref=e20]: 最終同期 06/29 13:09 ・ 累計 30 戦
+    - combobox [ref=e21]:
+      - 'option "自動: オフ" [selected]'
+      - 'option "自動: 5分"'
+      - 'option "自動: 15分"'
+      - 'option "自動: 30分"'
+    - button "同期" [ref=e22] [cursor=pointer]
+  - table [ref=e26]:
+    - row "Charting by TradingView" [ref=e27]:
+      - cell
+      - cell "Charting by TradingView" [ref=e28]:
+        - link "Charting by TradingView" [ref=e32] [cursor=pointer]:
+          - /url: https://www.tradingview.com/?utm_medium=lwc-link&utm_campaign=lwc-chart&utm_source=localhost/
+          - img [ref=e33]
+      - cell [ref=e37]
+    - row [ref=e41]:
+      - cell
+      - cell [ref=e42]
+      - cell [ref=e46]
